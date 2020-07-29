@@ -1,0 +1,99 @@
+
+.sub_container {
+    height: 650px;
+    width: 100%;
+    padding: 20px;
+
+    .btn {
+        position: absolute; 
+        bottom: 5%;
+    }
+    .title_length {
+        width: 80%;
+    }
+    p {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    .route_box {
+        text-align: center;
+    }
+    .auth_select {
+        width: 140px;
+    }
+    .pointer {
+        font-size: 30px;
+    }
+}
+
+.explanation_box {
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+    border: 1px solid dimgray
+}
+
+.msg {
+    color: red;
+    padding-left: 10px;
+}
+
+.between_title_date {
+    padding-left: 30px;
+    display: inline-block;
+}
+
+.pending_title {
+    border-bottom: 1px black dotted;
+    margin-bottom: 20px;
+}
+
+.approval_btn {
+    float: right;
+    padding-right: 20px;
+}
+
+.table_container {
+   padding: 10px;
+
+    table {
+        width: 100%;
+        font-size: 15px;
+      }
+      table, tr, th, td {
+        border-bottom: dotted 1px;
+        padding: 10px;
+        text-align: center;
+    }
+}
+
+.detail_general_box {
+    border: 1px gainsboro solid;
+}
+
+.detail_explanation_box {
+    height: 300px;
+}
+
+.re_submit_btn {
+    left: 25%;
+}
+
+.discard_btn {
+    left: 37%;
+}
+
+.file_tag{
+    margin-top: 10px;
+}
+
+.file_link{
+    display: inline;
+}
+
+.modification_back_btn {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    text-decoration: underline;
+}
