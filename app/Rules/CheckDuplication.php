@@ -48,10 +48,10 @@ class CheckDuplication implements Rule
                 }
                 if($this->{$auth} === 'escape_duplication_1' || $this->{$auth} === null) {
                     $this->{$auth} = 'escape_duplication_2';
-                 }
-                 if($this->{$subauth} === 'escape_duplication_2' || $this->{$subauth} === null) {
+                }
+                if($this->{$subauth} === 'escape_duplication_2' || $this->{$subauth} === null) {
                      $this->{$subauth} = 'escape_duplication_3';
-                 }
+                }
                 if($this->{$auth} === $this->{$subauth}) {
                     $result[] = false;
                 } else {

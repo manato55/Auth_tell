@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ 'Auth_tell' }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/common.css') }}" rel="stylesheet">
@@ -30,7 +30,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/home') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ 'Auth_tell' }}
                     </a>
                 </div>
 
@@ -44,19 +44,16 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('login') }}">ログイン</a></li>
+                            <li><a href="{{ route('register') }}">登録</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    メニュー <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a id="logout" href="{{ route('logout') }}">
-                                            ログアウト
-                                        </a>
                                         <a href="{{ route('pending') }}">
                                             受信BOX
                                         </a>
@@ -68,6 +65,12 @@
                                         </a>
                                         <a href="{{ route('retrieve') }}">
                                             返却案件
+                                        </a>
+                                        <a href="{{ route('account') }}">
+                                            アカウント設定
+                                        </a>
+                                        <a id="logout" href="{{ route('logout') }}">
+                                            ログアウト
                                         </a>
                                         
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -29,11 +29,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function draft()
-    {
-        return $this->hasMany(Draft::class,'user_id','id');
-    }
-
     public static function SameSection() {
         $data = self::where('dep', Auth::User()->dep)
                     ->where('sec', Auth::User()->sec)
@@ -41,9 +36,29 @@ class User extends Authenticatable
                     ->orWhere(function($query) {
                         $query->where('dep', Auth::User()->dep)
                               ->where('role','LIKE', "%部長%");
-                    })
+                    })->orderByRaw("(CASE 
+                    WHEN (role = '部長') THEN 1 
+                    WHEN (role = '課長') THEN 2 
+                    WHEN (role = '統括課長代理') 
+                    THEN 3 WHEN (role = '課長代理') 
+                    THEN 4 WHEN (role = '主任') THEN 5 
+                    ELSE 9999 END)" 
+                    )
                     ->get();
 
         return $data;
+    }
+
+    public static function ShowDetail($id) {
+        $index = self::join('drafts','users.id','=','drafts.user_id')
+                       ->where('drafts.id',$id)->first();
+                      
+
+        return $index;
+    }
+
+    public static function ChangeAccount($request) {
+        $user = self::where('id',Auth::User()->id)->first();
+        $user->fill($request->all())->save();
     }
 }

@@ -28,10 +28,12 @@
                            @if(!empty($index))
                              @foreach($index as $val)
                                 <tr>
-                                    <td><a href="/detail/{{$val->id}}">{{ $val->title }}</a></td>
+                                    <!-- <td><a href="/detail/{{$val->id}}">{{ $val->title }}</a></td> -->
+                                    <td><a href="{{route('detail', ['id'=>$val->id] ) }}">{{ $val->title }}</a></td>
                                     <td>{{ $val->name }}</td>
                                     <td>{{ date('y.n.j', strtotime($val->created_at)) }}</td>
-                                    <td><a href="/retrieve/{{$val->id}}" class="self_retrieve">引戻す</a></td>
+                                    
+                                    <td><a href="{{ route('selfRetrieve', ['id'=>$val->id] ) }}" class="self_retrieve">引戻す</a></td>
                                 </tr>
                              @endforeach
                            @else

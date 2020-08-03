@@ -30,30 +30,36 @@
                         <div class="tab-content">
                             <div id="general" class="tab-pane active">
                                 <p>件名</p>
-                                  <p class="detail_general_box">{{$index->title}}</p>
+                                  <p class="detail_general_box">{{ $index->title }}</p>
                                 <p>登録日</p>
                                   <span>{{ date('y.n.j', strtotime($index->created_at)) }}</span> 
                                 <p>説明文</p>
-                                  <p class="detail_general_box detail_explanation_box">{{$index->explanation}}</p>
+                                  <p class="detail_general_box detail_explanation_box">{{ $index->explanation }}</p>
                             </div>
                             <div id="document" class="tab-pane">
                               <ul>
                                 <p>依頼文等</p>
-                                <li><a href="/storage/files/{{$index->file_1}}">{{ $index->file_1 }}</a></li>
-                                <li><a href="/storage/files/{{$index->file_2}}">{{ $index->file_2 }}</a></li>
-                                <li><a href="/storage/files/{{$index->file_3}}">{{ $index->file_3 }}</a></li>
-                                <li><a href="/storage/files/{{$index->file_4}}">{{ $index->file_4 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_1 }}">{{ $index->file_1 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_2 }}">{{ $index->file_2 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_3 }}">{{ $index->file_3 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_4 }}">{{ $index->file_4 }}</a></li>
                                 <p>参考資料</p>
-                                <li><a href="/storage/files/{{$index->ref_1}}">{{ $index->ref_1 }}</a></li>                               
-                                <li><a href="/storage/files/{{$index->ref_2}}">{{ $index->ref_2 }}</a></li>
-                                <li><a href="/storage/files/{{$index->ref_3}}">{{ $index->ref_3 }}</a></li>
-                                <li><a href="/storage/files/{{$index->ref_3}}">{{ $index->ref_4 }}</a></li> 
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_1 }}">{{ $index->ref_1 }}</a></li>                               
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_2 }}">{{ $index->ref_2 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_3 }}">{{ $index->ref_3 }}</a></li>
+                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_4 }}">{{ $index->ref_4 }}</a></li> 
                               </ul>
                             </div>
                             <div id="route" class="tab-pane route_box">
-                                <p>担当者：{{$index->name}}</p>
+                                <p>担当者：{{ $index->name }}</p>
                                 <p class="pointer">⬇</p>
-                                <p>関与者1：{{$index->auth_1}}
+                                <p>関与者1：
+                                  @foreach($get_role as $val)
+                                    @if($val->name === $index->auth_1)
+                                      {{ $val->role }}&nbsp;
+                                    @endif
+                                  @endforeach
+                                  {{ $index->auth_1 }}
                                   @if(isset($task_holder->name) && $index->auth_1 === $task_holder->name )
                                     （案件あり）
                                   @endif
@@ -62,7 +68,13 @@
                                 @if($index->auth_2 === NULL)
                                   <p>関与者2：--- 
                                 @else
-                                  関与者2：{{$index->auth_2}}
+                                  関与者2：
+                                  @foreach($get_role as $val)
+                                    @if($val->name === $index->auth_2)
+                                      {{ $val->role }}&nbsp;
+                                    @endif
+                                  @endforeach
+                                  {{ $index->auth_2 }}
                                   @if(isset($task_holder->name) && $index->auth_2 === $task_holder->name )
                                     （案件あり）
                                   @endif
@@ -72,7 +84,13 @@
                                 @if($index->auth_3 === NULL)
                                   <p>関与者3：--- 
                                 @else
-                                  関与者3：{{$index->auth_3}}
+                                  関与者3：
+                                  @foreach($get_role as $val)
+                                    @if($val->name === $index->auth_3)
+                                      {{ $val->role }}&nbsp;
+                                    @endif
+                                  @endforeach
+                                  {{ $index->auth_3 }}
                                   @if(isset($task_holder->name) && $index->auth_3 === $task_holder->name )
                                     （案件あり）
                                   @endif
@@ -82,7 +100,13 @@
                                 @if($index->auth_4 === NULL)
                                   <p>関与者4：--- 
                                 @else
-                                  関与者4：{{$index->auth_4}}
+                                  関与者4：
+                                  @foreach($get_role as $val)
+                                    @if($val->name === $index->auth_4)
+                                      {{ $val->role }}&nbsp;
+                                    @endif
+                                  @endforeach
+                                  {{ $index->auth_4 }}
                                   @if(isset($task_holder->name) && $index->auth_4 === $task_holder->name )
                                     （案件あり）
                                   @endif
@@ -92,7 +116,13 @@
                                 @if($index->auth_5 === NULL)
                                   <p>関与者5：--- 
                                 @else
-                                  関与者5：{{$index->auth_5}}
+                                  関与者5：
+                                  @foreach($get_role as $val)
+                                    @if($val->name === $index->auth_5)
+                                      {{ $val->role }}&nbsp;
+                                    @endif
+                                  @endforeach
+                                  {{ $index->auth_5 }}
                                   @if(isset($task_holder->name) && $index->auth_5 === $task_holder->name )
                                     （案件あり）
                                   @endif

@@ -8,6 +8,8 @@ use App\Draft;
 use App\User;
 use App\RetrievedTask;
 use App\Http\Requests\HomeRequest; 
+use Illuminate\Support\Facades\File;
+
 
 
 class RetrievedTaskController extends Controller
@@ -41,8 +43,10 @@ class RetrievedTaskController extends Controller
    public function retrieveToSenderIndex(request $request) {
         $index = Draft::where('id',$request->id)->first();
 
+
         return view('retrieveSenderIndex',[
             'index'=>$index,
+            'back'=> url()->previous(),
         ]);
 
    }
@@ -58,6 +62,15 @@ class RetrievedTaskController extends Controller
 
    public function taskModificationIndex(request $request) {
         $index = Draft::GetTaskModificationIndex($request->id);
+        
+        //ユーザーの役職名取得
+        $get_role = User::where(function($query)use($index) {
+            for($i=1;$i<6;$i++) {
+                $auth_num = 'auth_'.$i;
+                    $query->orWhere('name', $index->{$auth_num});
+                }
+            })->get();
+           
       
         $data = User::SameSection();
 
@@ -67,13 +80,13 @@ class RetrievedTaskController extends Controller
             $var_date = date('Y-m-d', strtotime(old('registered_date')));
         }
 
-        $back = url()->previous();
 
         return view('modification',[
             'index'=>$index,
             'data'=>$data,
             'var_date'=>$var_date,
-            'back'=>$back,
+            'back'=>url()->previous(),
+            'get_role'=>$get_role,
         ]);
    }
 
@@ -87,11 +100,25 @@ class RetrievedTaskController extends Controller
        return redirect('/retrieve');
    }
 
-   public function delete(request $request) {
-        Draft::where('id', $request->id)->update([$request->num => NULL]);
+   public function deleteTask($id) {
+      
+        Draft::deleteTaskFile($id);
+        Draft::deleteTaskRef($id);
+        Draft::where('id',$id)->delete();
+        RetrievedTask::where('retrieved_task',$id)->delete();
 
-        return redirect()->action('RetrievedTaskController@taskModificationIndex',[
-                                                    'id'=>$request->id,
-                                                ]); 
+        $path = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $id;
+        File::deleteDirectory($path);
+
+        return redirect()->route('retrieve');
+  
+   }
+
+   public function deleteFile(request $request) {
+
+       Draft::deleteFile($request->id, $request->num);
+
+       return redirect()->action('RetrievedTaskController@taskModificationIndex',['id'=>$request->id,]); 
+
    }
 }

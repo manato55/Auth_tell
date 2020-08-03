@@ -14,22 +14,22 @@
                         </div>
                     @endif    
                 </div>
-                <p class="msg">{{session('msg')}}</p>
+                <p class="msg">{{ session('msg') }}</p>
                 <ul>
                   @foreach($errors->all() as $error)
-                    <li class="msg">{{$error}}</li>
+                    <li class="msg">{{ $error }}</li>
                   @endforeach
+                  @isset($error)
+                    <li class="msg">資料を添付していた場合は再度添付してください。</li> 
+                  @endisset
                 </ul>
 
                     <div class="sub_container">
-                        <form method="POST" action="/upload" enctype="multipart/form-data">
-                            {{csrf_field()}}
+                        <form method="POST" action="{{ route('upload') }}" enctype="multipart/form-data">
+                            {{ csrf_field() }}
                             <ul class="nav nav-tabs">
                                 <li class="nav-item active">
                                     <a href="#general" class="nav-link" data-toggle="tab">概要</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#explanation" class="nav-link" data-toggle="tab">説明</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#document" class="nav-link" data-toggle="tab">資料</a>
@@ -45,21 +45,20 @@
                                     <input class="title_length" type="text" name="title" value="{{ old('title') }}">
                                     <p>登録日</p>
                                     <input type="date" name="registered_date" value="{{ $var_date }}">
-                                </div>
-                                <div id="explanation" class="tab-pane">
+                                    <p>説明文</p>
                                     <textarea name="explanation" class="explanation_box">{{ old('explanation') }}</textarea>
                                 </div>
                                 <div id="document" class="tab-pane">
                                   <p>依頼文等</p>
-                                  <input type="file" id="file" name="file_1" class="form-control file_tag">
-                                  <input type="file" id="file" name="file_2" class="form-control file_tag">
-                                  <input type="file" id="file" name="file_3" class="form-control file_tag">
-                                  <input type="file" id="file" name="file_4" class="form-control file_tag">
+                                  <input type="file" id="file_1" name="file_1" class="form-control file_tag">
+                                  <input type="file" id="file_2" name="file_2" class="form-control file_tag">
+                                  <input type="file" id="file_3" name="file_3" class="form-control file_tag">
+                                  <input type="file" id="file_4" name="file_4" class="form-control file_tag">
                                   <p>参考資料</p>
-                                  <input type="file" id="file" name="ref_1" class="form-control file_tag">
-                                  <input type="file" id="file" name="ref_2" class="form-control file_tag">
-                                  <input type="file" id="file" name="ref_3" class="form-control file_tag">
-                                  <input type="file" id="file" name="ref_4" class="form-control file_tag">
+                                  <input type="file" id="ref_1" name="ref_1" class="form-control file_tag">
+                                  <input type="file" id="ref_2" name="ref_2" class="form-control file_tag">
+                                  <input type="file" id="ref_3" name="ref_3" class="form-control file_tag">
+                                  <input type="file" id="ref_4" name="ref_4" class="form-control file_tag">
                                 </div>
                                   <div id="route" class="tab-pane route_box">
                                    <p>担当者：
@@ -70,7 +69,7 @@
                                      <select name="auth_1" class="auth_select" id="auth_1">
                                         <option>---</option>
                                         @foreach($data as $val)
-                                        <option @if(old('auth_1') === $val->name) selected  @endif>{{$val->name}}</option>
+                                          <option value="{{ $val->name }}" @if(old('auth_1') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                         @endforeach
                                      </select>
                                    </p>
@@ -79,7 +78,7 @@
                                      <select name="auth_2" class="auth_select" id="auth_2">
                                        <option>---</option>
                                        @foreach($data as $val)
-                                       <option @if(old('auth_2') === $val->name) selected  @endif>{{$val->name}}</option>
+                                         <option value="{{ $val->name }}" @if(old('auth_2') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                        @endforeach
                                      </select>
                                    </p>
@@ -88,7 +87,7 @@
                                      <select name="auth_3" class="auth_select" id="auth_3">
                                        <option>---</option>
                                        @foreach($data as $val)
-                                       <option @if(old('auth_3') === $val->name) selected  @endif>{{$val->name}}</option>
+                                         <option value="{{ $val->name }}" @if(old('auth_3') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                        @endforeach
                                      </select>
                                    </p>
@@ -97,7 +96,7 @@
                                      <select name="auth_4" class="auth_select" id="auth_4">
                                        <option>---</option>
                                        @foreach($data as $val)
-                                       <option @if(old('auth_4') === $val->name) selected  @endif>{{$val->name}}</option>
+                                         <option value="{{ $val->name }}" @if(old('auth_4') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                        @endforeach
                                      </select>
                                    </p>
@@ -106,14 +105,14 @@
                                      <select name="auth_5" class="auth_select" id="auth_5">
                                        <option>---</option>
                                        @foreach($data as $val)
-                                       <option @if(old('auth_5') === $val->name) selected  @endif>{{$val->name}}</option>
+                                         <option value="{{ $val->name }}" @if(old('auth_5') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                        @endforeach
                                      </select>
                                    </p>
                                 </div>
                             </div>
 
-                            <button class="submit btn">提出</button>
+                            <button class="submit btn" id="initial_submit">提出</button>
                         </form>
                     </div>
 

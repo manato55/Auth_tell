@@ -26,9 +26,9 @@
                        <tbody>
                             @forelse($index as $val)
                             <tr>
-                                <td><a href="/detail/{{$val->id}}">{{ $val->title }}</a></td>
+                                <td><a href="{{ route('detail', ['id'=>$val->id] ) }}">{{ $val->title }}</a></td>
                                 <td>{{ date('y.n.j', strtotime($val->updated_at)) }}</td>
-                                <td><a class="discard_btn" href="/detail/delete/{{$val->id}}">削除</a></td>
+                                <td><a class="discard_btn" href="{{ route('detail_delete', ['id'=>$val->id] ) }}">削除</a></td>
                             </tr>
                             @empty
                               決定済み案件はありません

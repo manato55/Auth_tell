@@ -39,19 +39,33 @@ class HomeController extends Controller
         ]);
     }
 
-    public function detail(request $request) {
-        $index = Draft::ShowDetail($request->id);
-        $task_holder = Draft::select("$index->process as name")
-                            ->where('id',$request->id)
-                            ->where('authorization','!=','done')
-                            ->first();
+    public function detail(request $request) { 
+        $index = User::ShowDetail($request->id);
+      
+        //ユーザーの役職名取得
+        $get_role = User::where(function($query)use($index) {
+            for($i=1;$i<6;$i++) {
+                $auth_num = 'auth_'.$i;
+                    $query->orWhere('name', $index->{$auth_num});
+                }
+            })->get();
         
-        $back = url()->previous();
+        //案件保持者の取得
+        if($index->process !== 'auth_6') {
+            $task_holder = Draft::select("$index->process as name")
+                                ->where('id',$request->id)
+                                ->where('authorization','!=','done')
+                                ->first();
+        } else {
+            $task_holder = NULL;
+        }
+        
         
         return view('detail',[
             'index'=>$index,
-            'back'=>$back,
+            'back'=>url()->previous(),
             'task_holder'=>$task_holder,
+            'get_role'=>$get_role,
         ]);
 
     }
@@ -59,6 +73,6 @@ class HomeController extends Controller
     public function delete($id) {
         Draft::find($id)->delete();
 
-        return redirect('authorized');
+        return redirect()->route('authorized');
     }
 }

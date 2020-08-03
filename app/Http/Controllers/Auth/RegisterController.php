@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\File;
 
 class RegisterController extends Controller
 {
@@ -48,7 +49,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'dep' => 'required|string|max:20',
             'sec' => 'required|string|max:20',
@@ -66,7 +67,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'dep' => $data['dep'],
@@ -75,5 +76,11 @@ class RegisterController extends Controller
             'role' => $data['role'],
             'password' => bcrypt($data['password']),
         ]);
+
+
+        $path = storage_path() . '/app/public/files/' . $user->id;
+        File::makeDirectory($path, 0777, true);
+
+        return $user;
     }
 }

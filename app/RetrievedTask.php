@@ -59,24 +59,26 @@ class RetrievedTask extends Model
                                     ]);
                   
             $file = Draft::where('id',$id)->first();
-    
+
+            //Draftテーブルのカラム「file」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('file_'.$i)) {
                     $num = 'file_'.$i;
-                    Storage::delete('public/files/' . $file->{$num});
+                    Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'file' . '/' . $file->{$num});
                     $filename = $request->file('file_'.$i)->getClientOriginalName();
-                    $path = $request->file('file_'.$i)->storeAs('files', $filename, 'public');
+                    $path = $request->file('file_'.$i)->storeAs('files/' . Auth::User()->id . '/' . $id . '/' . 'file', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }
             }
     
+             //Draftテーブルのカラム「ref」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('ref_'.$i)) {
                     $num = 'ref_'.$i;
-                    Storage::delete('public/files/' . $file->{$num});
+                    Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'ref' . '/' . $file->{$num});
                     $filename = $request->file('ref_'.$i)->getClientOriginalName();
-                    $path = $request->file('ref_'.$i)->storeAs('files', $filename, 'public');
+                    $path = $request->file('ref_'.$i)->storeAs('files'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }
@@ -98,39 +100,37 @@ class RetrievedTask extends Model
 
             $file = Draft::where('id',$id)->first();
 
+            //Draftテーブルのカラム「file」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('file_'.$i)) {
                     $num = 'file_'.$i;
-                    Storage::delete('public/files/' . $file->{$num});
+                    Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'file' . '/' . $file->{$num});
                     $filename = $request->file('file_'.$i)->getClientOriginalName();
-                    $path = $request->file('file_'.$i)->storeAs('files', $filename, 'public');
+                    $path = $request->file('file_'.$i)->storeAs('files/' . Auth::User()->id . '/' . $id . '/' . 'file', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }
             }
     
+             //Draftテーブルのカラム「ref」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('ref_'.$i)) {
                     $num = 'ref_'.$i;
-                    Storage::delete('public/files/' . $file->{$num});
+                    Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'ref' . '/' . $file->{$num});
                     $filename = $request->file('ref_'.$i)->getClientOriginalName();
-                    $path = $request->file('ref_'.$i)->storeAs('files', $filename, 'public');
+                    $path = $request->file('ref_'.$i)->storeAs('files'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }
             }
 
-            $auth_num = RetrievedTask::where('retrieved_task',$id)->first();
+            $auth_num = self::where('retrieved_task',$id)->first();
  
             Draft::where('id',$id)->update(['process'=>$auth_num->intercepted_auth]);
-            RetrievedTask::where('retrieved_task',$id)->delete();
- 
-        } else {
-            Draft::where('id',$id)->delete();
             self::where('retrieved_task',$id)->delete();
-
-            return redirect('/retrieve');
-        }
+ 
+        } 
        
     }
 }
+

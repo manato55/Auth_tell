@@ -18,12 +18,15 @@
                <div class="table_container">
                  <p>件名</p>
                  <p class="detail_general_box">{{ $index->title }}</p>
-                   <form action="/toSender/{{$index->id}}" method="POST">
+                   <!-- <form action="/toSender/{{$index->id}}" method="POST"> -->
+                   <form action="{{ route('toSender', ['id'=>$index->id] ) }}" method="POST">
                      {{ csrf_field() }}
                      <p>コメント</p>
                      <textarea name="comment" class="explanation_box"></textarea>
                      <br><button class="btn retrieve">差し戻し</button>
                    </form>
+                   <a class="modification_back_btn" href="{{ route('pending') }}">戻る</a>
+
                 </div>
 
             </div>
