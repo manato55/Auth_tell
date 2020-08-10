@@ -48,7 +48,7 @@
                             <li><a href="{{ route('register') }}">登録</a></li>
                         @else
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                                     メニュー <span class="caret"></span>
                                 </a>
 
@@ -66,6 +66,9 @@
                                         <a href="{{ route('retrieve') }}">
                                             返却案件
                                         </a>
+                                        <a href="{{ route('search') }}">
+                                            案件検索
+                                        </a>
                                         <a href="{{ route('account') }}">
                                             アカウント設定
                                         </a>
@@ -76,6 +79,7 @@
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
+
                                     </li>
                                 </ul>
                             </li>

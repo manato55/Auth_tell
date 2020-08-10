@@ -1,15 +1,12 @@
 
 .sub_container {
-    height: 650px;
+    height: 700px;
     width: 100%;
     padding: 20px;
 
     .btn {
         position: absolute; 
         bottom: 5%;
-    }
-    .title_length {
-        width: 80%;
     }
     p {
         margin-top: 10px;
@@ -24,6 +21,10 @@
     .pointer {
         font-size: 30px;
     }
+}
+
+.title_length {
+    width: 70%;
 }
 
 .explanation_box {
@@ -84,7 +85,7 @@
 }
 
 .margin_btn {
-    margin-left: 220px;
+    margin-left: 210px;
 }
 
 .file_tag{
@@ -104,4 +105,20 @@
 
 .del {
     margin-left: 15px;
+}
+
+@media(max-width:362px) {
+    .nav-link {
+        font-size: 10px;
+    }
+
+}
+
+.search_container {
+    padding: 30px 10px;
+    
+}
+
+.title_margin_bottom {
+    margin-bottom: 20px;
 }

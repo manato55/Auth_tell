@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\User;
 
 
 
@@ -17,7 +18,7 @@ class Draft extends Model
 
     public static function RegisterDraft($request, $title, $registered_date, $explanation, $auth_1, $auth_2, $auth_3, $auth_4, $auth_5) {
         
-        $draftData = Draft::create([
+        $draftData = self::create([
             'user_id'=>Auth::User()->id,
             'title'=>$title,
             'registered_date'=>$registered_date,
@@ -41,9 +42,9 @@ class Draft extends Model
         File::makeDirectory($refPath, 0777, true);
       
         $filePath02 = 'files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'file';
-        $refPath02 = 'files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'ref';
+        $refPath02  = 'files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'ref';
 
-        $draft = Draft::where('id',$draftData->id)->first();
+        $draft = self::where('id',$draftData->id)->first();
        
         //Draftテーブルのカラム「file」の数だけループ
         for($i=1;$i<5;$i++) {
@@ -73,7 +74,7 @@ class Draft extends Model
     }
 
     public static function PendingIndex() {
-        $data = Draft::where(function($query) {
+        $data = self::where(function($query) {
             //draftテーブルのカラム「auth」の数だけループさせる
             for($i=1;$i<6;$i++) {
                 $query->orWhere('auth_'.$i, Auth::User()->name);
@@ -84,43 +85,51 @@ class Draft extends Model
             $process[] = $val->process;
             $id[] = $val->id;
         } 
-        
-
+       
         if(!empty($process) && !empty($id)) {
-            $row = Draft::select('process','drafts.id')
-                        ->where(function($query) use($process,$id) {
-                for($i=0;$i<count($process);$i++) {
-                    //auth_1〜auth_5においてログインユーザーがレコードにあるかどうか確認
-                    if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') {
-                        $query->orWhere($process[$i], Auth::User()->name)
-                              ->where('drafts.id',$id[$i]);
+            //auth_1〜auth_5においてログインユーザーがレコードにあるかどうか確認
+            for($i=0;$i<count($process);$i++) {
+                if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') {
+                    $row[] = self::select('process',
+                                          'drafts.id')
+                             ->where($process[$i], Auth::User()->name)
+                             ->where('drafts.id',$id[$i])
+                             ->get();
+                }  
+            }
+           
+            if(!empty($row)) {
+                foreach($row as $val) {
+                    if( !$val->isEmpty() ) {
+                        //auth_1〜auth_5の末尾の数値のみ抜き出し
+                        $added_data_place = mb_substr($val[0]->process, -1, 1);
+                        //抜き出した数値に＋１を加える
+                        $added_data_place += 1;
+                        //＋１したauthを置き換えて変数に代入
+                        $replace_data[] = substr_replace($val[0]->process, $added_data_place, 5, 1);
+                        $process_2[] = $val[0]->process;
+                        $id_2[] = $val[0]->id;
                     }
                 }
-            })->get();
-            
-        
-            foreach($row as $val) {
-                //auth_1〜auth_5の末尾の数値のみ抜き出し
-                $added_data_place = mb_substr($val['process'], -1, 1);
-                //抜き出した数値に＋１を加える
-                $added_data_place += 1;
-                 //＋１したauthを置き換えて変数に代入
-                $replace_data[] = substr_replace($val['process'], $added_data_place, 5, 1);
-                $process_2[] = $val->process;
-                $id_2[] = $val->id;
             }
-            
+           
             if(!empty($replace_data)) {
                 for($i=0;$i<count($replace_data);$i++) {
                     if($replace_data[$i] === 'auth_6') {
                         $replace_data[$i] = 'auth_5';
                     }
+                    //next_personはブラウザ上で表示される「次の承認者」という意味
                     $row_2[] = Draft::select("$replace_data[$i] as next_person",
-                                            'drafts.id','title','drafts.created_at','name')
+                                             'drafts.id',
+                                             'title',
+                                             'drafts.created_at',
+                                             'name')
                                     ->join('users','users.id','=','drafts.user_id')
                                     ->where(function($query) use($process_2, $id_2, $i) {
+                                      if($process_2[$i] !== 'auth_0' && $process_2[$i] !== 'auth_6') { 
                                         $query->orWhere($process_2[$i], Auth::User()->name)
                                                 ->where('drafts.id',$id_2[$i]);
+                                      }
                                     })->get();
 
                 }
@@ -132,7 +141,7 @@ class Draft extends Model
     }
 
     public static function Escalation($id) {
-        $data = Draft::where('id',$id)->select('process')->first();
+        $data = self::where('id',$id)->select('process')->first();
 
         //auth_1〜auth_5の末尾の数値のみ抜き出し
         $added_data_place = mb_substr($data['process'], -1, 1);
@@ -143,25 +152,25 @@ class Draft extends Model
         //＋１したauthを置き換えて変数に代入
         $replace_data = substr_replace($data['process'], $added_data_place, 5, 1);
 
-        Draft::where('id',$id)->update(['process'=>$replace_data]);
+        self::where('id',$id)->update(['process'=>$replace_data]);
 
-        $updated_data = Draft::select('process')->where('id',$id)->first();
+        $updated_data = self::select('process')->where('id',$id)->first();
 
         //カラム「auth_6」は存在しないため除外
         if($updated_data->process !== 'auth_6') {
-            $status = Draft::where('id',$id)->select($updated_data->process)->first();
+            $status = self::where('id',$id)->select($updated_data->process)->first();
         } else {
             $status = NULL;
         }
 
         if($status === NULL || $status->{$updated_data['process']} === '---' ) {
-            Draft::where('id',$id)->update(['Authorization'=>'done']);
+            self::where('id',$id)->update(['Authorization'=>'done']);
         }
       
     }
 
     public static function PendingProcess() {
-        $data = Draft::where('user_id', Auth::User()->id)->get();
+        $data = self::where('user_id', Auth::User()->id)->get();
 
         foreach($data as $val) {
             $id[] = $val->id;
@@ -172,7 +181,10 @@ class Draft extends Model
         if(!empty($id) && !empty($process)) {
             for($i=0;$i<count($data);$i++){
                 if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') {
-                    $row[] = Draft::select("$process[$i] as name",'title','Authorization','id','created_at')
+                    $row[] = self::select("$process[$i] as name",
+                                          'title','Authorization',
+                                          'id',
+                                          'created_at')
                         ->where(function($query) use($id, $i){
                                 $query->orWhere('id',$id[$i]);
                         })
@@ -205,7 +217,9 @@ class Draft extends Model
     }
 
     public static function GetRetrievedIndex() {
-        $index = Draft::select('drafts.id','title','name','retrieved_tasks.updated_at')
+        $index = self::select('drafts.id',
+                              'title','name',
+                              'retrieved_tasks.updated_at')
                         ->join('retrieved_tasks','drafts.id','=','retrieved_tasks.retrieved_task')
                         ->join('users','retrieved_tasks.retriever','=','users.id')
                         ->where('user_id', Auth::User()->id)
@@ -213,6 +227,7 @@ class Draft extends Model
                         ->get();
 
         return $index;
+
     }
 
     public static function GetTaskModificationIndex($id) {
@@ -222,6 +237,7 @@ class Draft extends Model
                         ->first();
 
         return $index;
+
     }
 
     public static function deleteFile($id, $num) {
@@ -300,5 +316,25 @@ class Draft extends Model
                 }
             }
         }
+    }
+
+    public static function searchTaskSec($title) {
+        $index = User::join('drafts','users.id','=', 'drafts.user_id')
+                        ->where('users.sec',Auth::User()->sec)
+                        ->where('title','LIKE', "%$title%")
+                        ->get();
+                        
+
+        return $index;
+    }
+
+    public static function searchTaskTeam($title) {
+        $index = User::join('drafts','users.id','=', 'drafts.user_id')
+                        ->where('users.team',Auth::User()->team)
+                        ->where('title','LIKE', "%$title%")
+                        ->get();
+                        
+
+        return $index;
     }
 }

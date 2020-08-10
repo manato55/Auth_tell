@@ -39,15 +39,15 @@
                             <div id="document" class="tab-pane">
                               <ul>
                                 <p>依頼文等</p>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_1 }}">{{ $index->file_1 }}</a></li>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_2 }}">{{ $index->file_2 }}</a></li>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_3 }}">{{ $index->file_3 }}</a></li>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/file/{{ $index->file_4 }}">{{ $index->file_4 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/file/{{ $index->file_1 }}">{{ $index->file_1 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/file/{{ $index->file_2 }}">{{ $index->file_2 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/file/{{ $index->file_3 }}">{{ $index->file_3 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/file/{{ $index->file_4 }}">{{ $index->file_4 }}</a></li>
                                 <p>参考資料</p>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_1 }}">{{ $index->ref_1 }}</a></li>                               
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_2 }}">{{ $index->ref_2 }}</a></li>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_3 }}">{{ $index->ref_3 }}</a></li>
-                                  <li><a href="/storage/files/{{ Auth::User()->id }}/{{ $index->id }}/ref/{{ $index->ref_4 }}">{{ $index->ref_4 }}</a></li> 
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/ref/{{ $index->ref_1 }}">{{ $index->ref_1 }}</a></li>                               
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/ref/{{ $index->ref_2 }}">{{ $index->ref_2 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/ref/{{ $index->ref_3 }}">{{ $index->ref_3 }}</a></li>
+                                  <li><a href="/storage/files/{{ $index->user_id }}/{{ $index->id }}/ref/{{ $index->ref_4 }}">{{ $index->ref_4 }}</a></li> 
                               </ul>
                             </div>
                             <div id="route" class="tab-pane route_box">

@@ -34,8 +34,10 @@ class User extends Authenticatable
                     ->where('sec', Auth::User()->sec)
                     ->where('id','!=', Auth::User()->id)
                     ->orWhere(function($query) {
+                        if(Auth::User()->role !== '部長') {
                         $query->where('dep', Auth::User()->dep)
                               ->where('role','LIKE', "%部長%");
+                        }
                     })->orderByRaw("(CASE 
                     WHEN (role = '部長') THEN 1 
                     WHEN (role = '課長') THEN 2 

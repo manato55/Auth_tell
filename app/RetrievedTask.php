@@ -18,7 +18,7 @@ class RetrievedTask extends Model
         $user = Draft::select("$data->process as name")->where('id',$id)->first();
         $name = User::where('name',$user->name)->first();
 
-        $task = new RetrievedTask;
+        $task = new self;
         
         $task->retriever = $name->id;
         $task->retrieved_ppl = Auth::User()->id;
@@ -33,7 +33,7 @@ class RetrievedTask extends Model
     public static function RetrieveToSender($id, $comment) {
         $user_id = Draft::where('id',$id)->first();
 
-        $task = new RetrievedTask;
+        $task = new self;
 
         $task->retriever = Auth::User()->id;
         $task->retrieved_ppl = $user_id->user_id;
@@ -88,14 +88,14 @@ class RetrievedTask extends Model
             
         } else if($submit === 'submit_1') {
             Draft::where('id',$id)->update([
-                                    'title'=>$title,
-                                    'registered_date'=>$registered_date,
-                                    'explanation'=>$explanation,
-                                    'auth_1'=>$auth_1,
-                                    'auth_2'=>$auth_2,
-                                    'auth_3'=>$auth_3,
-                                    'auth_4'=>$auth_4,
-                                    'auth_5'=>$auth_5,
+                                        'title'=>$title,
+                                        'registered_date'=>$registered_date,
+                                        'explanation'=>$explanation,
+                                        'auth_1'=>$auth_1,
+                                        'auth_2'=>$auth_2,
+                                        'auth_3'=>$auth_3,
+                                        'auth_4'=>$auth_4,
+                                        'auth_5'=>$auth_5,
                                     ]);
 
             $file = Draft::where('id',$id)->first();

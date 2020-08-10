@@ -38,6 +38,9 @@ class ViewComposerServiceProvider extends ServiceProvider
         View::composer(
             'retrieveSenderIndex', 'App\Http\Composers\HomeComposer',
         );
+        View::composer(
+            'search', 'App\Http\Composers\HomeComposer',
+        );
     }
 
     /**

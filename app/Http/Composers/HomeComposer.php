@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeComposer
 {
+  
   public function compose(View $view) {
     
         $belonging = Auth::User()->dep.Auth::User()->sec.Auth::User()->team."\t".Auth::User()->name;
   
         $view->with('belonging',$belonging);
     
-    
   }
+
 }
