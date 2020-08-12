@@ -42,6 +42,7 @@ class HomeRequest extends FormRequest
                 'file',
                 'image',
                 new CheckFileDuplication($this->file_1, $this->file_2, $this->file_3, $this->file_4),
+                //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=2;$i<5;$i++) {

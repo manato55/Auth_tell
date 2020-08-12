@@ -36,6 +36,7 @@ class CheckFileDuplication implements Rule
      */
     public function passes($attribute, $value)
     {
+        //Draftテーブルのカラム「file」の数だけループ
         for($i=1;$i<5;$i++) {
             $file = '_file_'.$i;
             for($j=$i+1;$j<5;$j++) {

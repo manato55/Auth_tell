@@ -12,7 +12,8 @@ class HomeComposer
 {
   
   public function compose(View $view) {
-    
+
+        //ログインユーザーの所属を取得
         $belonging = Auth::User()->dep.Auth::User()->sec.Auth::User()->team."\t".Auth::User()->name;
   
         $view->with('belonging',$belonging);

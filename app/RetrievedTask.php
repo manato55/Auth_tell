@@ -19,7 +19,6 @@ class RetrievedTask extends Model
         $name = User::where('name',$user->name)->first();
 
         $task = new self;
-        
         $task->retriever = $name->id;
         $task->retrieved_ppl = Auth::User()->id;
         $task->retrieved_task = $id;
@@ -34,7 +33,6 @@ class RetrievedTask extends Model
         $user_id = Draft::where('id',$id)->first();
 
         $task = new self;
-
         $task->retriever = Auth::User()->id;
         $task->retrieved_ppl = $user_id->user_id;
         $task->retrieved_task = $id;
@@ -72,7 +70,7 @@ class RetrievedTask extends Model
                 }
             }
     
-             //Draftテーブルのカラム「ref」の数だけループ
+            //Draftテーブルのカラム「ref」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('ref_'.$i)) {
                     $num = 'ref_'.$i;
@@ -112,7 +110,7 @@ class RetrievedTask extends Model
                 }
             }
     
-             //Draftテーブルのカラム「ref」の数だけループ
+            //Draftテーブルのカラム「ref」の数だけループ
             for($i=1;$i<5;$i++) {
                 if($request->hasFile('ref_'.$i)) {
                     $num = 'ref_'.$i;
@@ -130,7 +128,6 @@ class RetrievedTask extends Model
             self::where('retrieved_task',$id)->delete();
  
         } 
-       
     }
 }
 

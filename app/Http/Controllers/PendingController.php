@@ -45,9 +45,10 @@ class PendingController extends Controller
     }
 
     public function authorized() {
+        //単純なDB処理のためコントローラーに記載
         $index = Draft::where('user_id', Auth::User()->id)
-                    ->where('authorization', 'done')
-                    ->get();
+                       ->where('authorization', 'done')
+                       ->get();
 
         return view('authorized',[
             'index'=>$index,

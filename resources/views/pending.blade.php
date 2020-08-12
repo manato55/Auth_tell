@@ -31,7 +31,6 @@
                             @if(!empty($index))
                                 @foreach($index as $val)
                                 <tr>
-                                    <!-- <td><a href="/detail/{{ $val[0]->id }}">{{ $val[0]->title }}</a></td> -->
                                     <td><a href="{{ route('detail', ['id'=>$val[0]->id] ) }}">{{ $val[0]->title }}</a></td>
                                     <td>{{ date('y.n.j', strtotime($val[0]->created_at)) }}</td>
                                     <td>{{ $val[0]->name }}</td>
@@ -43,9 +42,7 @@
                                         @endif
                                     </td>
                                     <td><a href="{{ route('pendingApproved', ['id'=>$val[0]->id] ) }}" class="approve">承認</a></td>
-                                    <!-- <td><a href="/pending/{{ $val[0]->id }}" class="approve">承認</a></td> -->
                                     <td><a href="{{ route('retrieveSenderIndex', ['id'=>$val[0]->id] ) }}">差し戻し</a></td>
-                                    <!-- <td><a href="/retrieveSenderIndex/{{ $val[0]->id }}">差し戻し</a></td> -->
                                 </tr>
                                 @endforeach
                             @else

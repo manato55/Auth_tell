@@ -130,7 +130,7 @@
                                 @endif
                             </div>
                         </div>
-                        <button class="btn"><a href="{{$back}}">戻る</a></button>                        
+                        <button class="btn"><a href="{{ $back }}">戻る</a></button>                        
                     </div>
             </div>
         </div>

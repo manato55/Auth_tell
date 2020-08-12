@@ -37,6 +37,7 @@ class CheckRefDuplication implements Rule
      */
     public function passes($attribute, $value)
     {
+        //Draftテーブルのカラム「ref」の数だけループ
         for($i=1;$i<5;$i++) {
             $ref = '_ref_'.$i;
             for($j=$i+1;$j<5;$j++) {

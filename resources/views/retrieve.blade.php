@@ -24,10 +24,8 @@
                            </tr>
                        </thead>
                        <tbody>
-                           
                              @forelse($index as $val)
                                 <tr>
-                                    <!-- <td><a href="/task_modification/{{ $val->id }}">{{ $val->title }}</a></td> -->
                                     <td><a href="{{ route('task_modification', ['id'=>$val->id] ) }}">{{ $val->title }}</a></td>
                                     <td>{{ $val->name }}</td>
                                     <td>{{ date('y.n.j', strtotime($val->updated_at)) }}</td>

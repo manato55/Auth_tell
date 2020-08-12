@@ -27,12 +27,14 @@ class SearchTaskController extends Controller
 
     public function search(request $request) {
     
+        //検索範囲が「課内」の場合
         if($request->search_range === 'sec') {
             if($request->search_title !== '') {
                 $index = Draft::searchTaskSec($request->search_title);
             } else {
                 $index = '';
             }
+        //検索範囲が「担当内」の場合
         } else {
             if($request->search_title !== '') {
                 $index = Draft::searchTaskTeam($request->search_title);

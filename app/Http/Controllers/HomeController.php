@@ -56,6 +56,7 @@ class HomeController extends Controller
                                 ->where('id',$request->id)
                                 ->where('authorization','!=','done')
                                 ->first();
+        //決定済みの案件はNULLとする
         } else {
             $task_holder = NULL;
         }

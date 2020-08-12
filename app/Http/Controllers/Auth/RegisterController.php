@@ -77,7 +77,7 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-
+        //ユーザー登録と同時にユーザー固有のディレクトリを作成
         $path = storage_path() . '/app/public/files/' . $user->id;
         File::makeDirectory($path, 0777, true);
 

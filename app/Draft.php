@@ -29,7 +29,6 @@ class Draft extends Model
             'auth_4'=>$auth_4,
             'auth_5'=>$auth_5,
             'process'=>'auth_1'
-
         ]);
 
         $path = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $draftData->id;
@@ -50,7 +49,6 @@ class Draft extends Model
         for($i=1;$i<5;$i++) {
             $file = $request->file('file_'.$i);
             if( isset($file) === true ){
-                $ext = $file->guessExtension();
                 $filename = $file->getClientOriginalName();
                 $filePath03 = $file->storeAs($filePath02, $filename, 'public');
                 $file_num = 'file_'.$i;
@@ -63,7 +61,6 @@ class Draft extends Model
         for($i=1;$i<5;$i++) {
             $ref = $request->file('ref_'.$i);
             if( isset($ref) === true ){
-                $ext = $ref->guessExtension();
                 $filename = $ref->getClientOriginalName();
                 $refPath03 = $ref->storeAs($refPath02, $filename, 'public');
                 $ref_num = 'ref_'.$i;
@@ -81,19 +78,14 @@ class Draft extends Model
             }
         })->get();
 
-        foreach($data as $val) {
-            $process[] = $val->process;
-            $id[] = $val->id;
-        } 
-       
-        if(!empty($process) && !empty($id)) {
+        if(!empty($data)) {
             //auth_1〜auth_5においてログインユーザーがレコードにあるかどうか確認
-            for($i=0;$i<count($process);$i++) {
-                if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') {
+            for($i=0;$i<count($data);$i++) {
+                if($data[$i]->process !== 'auth_0' && $data[$i]->process !== 'auth_6') {
                     $row[] = self::select('process',
                                           'drafts.id')
-                             ->where($process[$i], Auth::User()->name)
-                             ->where('drafts.id',$id[$i])
+                             ->where($data[$i]->process, Auth::User()->name)
+                             ->where('drafts.id',$data[$i]->id)
                              ->get();
                 }  
             }
@@ -107,8 +99,9 @@ class Draft extends Model
                         $added_data_place += 1;
                         //＋１したauthを置き換えて変数に代入
                         $replace_data[] = substr_replace($val[0]->process, $added_data_place, 5, 1);
-                        $process_2[] = $val[0]->process;
-                        $id_2[] = $val[0]->id;
+
+                        $process[] = $val[0]->process;
+                        $id[] = $val[0]->id;
                     }
                 }
             }
@@ -125,19 +118,16 @@ class Draft extends Model
                                              'drafts.created_at',
                                              'name')
                                     ->join('users','users.id','=','drafts.user_id')
-                                    ->where(function($query) use($process_2, $id_2, $i) {
-                                      if($process_2[$i] !== 'auth_0' && $process_2[$i] !== 'auth_6') { 
-                                        $query->orWhere($process_2[$i], Auth::User()->name)
-                                                ->where('drafts.id',$id_2[$i]);
-                                      }
+                                    ->where(function($query) use($process, $id, $i) {
+                                       if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') { 
+                                          $query->orWhere($process[$i], Auth::User()->name)
+                                                ->where('drafts.id',$id[$i]);
+                                       }
                                     })->get();
-
                 }
                 return $row_2;
             }
-
         }
-
     }
 
     public static function Escalation($id) {
@@ -152,6 +142,7 @@ class Draft extends Model
         //＋１したauthを置き換えて変数に代入
         $replace_data = substr_replace($data['process'], $added_data_place, 5, 1);
 
+        //Draftテーブルのprocessカラムをエスカレーションしたauthに更新
         self::where('id',$id)->update(['process'=>$replace_data]);
 
         $updated_data = self::select('process')->where('id',$id)->first();
@@ -171,25 +162,21 @@ class Draft extends Model
 
     public static function PendingProcess() {
         $data = self::where('user_id', Auth::User()->id)->get();
-
-        foreach($data as $val) {
-            $id[] = $val->id;
-            $process[] = $val->process;
-        }
        
-
-        if(!empty($id) && !empty($process)) {
+        if(!empty($data)) {
             for($i=0;$i<count($data);$i++){
-                if($process[$i] !== 'auth_0' && $process[$i] !== 'auth_6') {
-                    $row[] = self::select("$process[$i] as name",
-                                          'title','Authorization',
+                if($data[$i]->process !== 'auth_0' && $data[$i]->process !== 'auth_6') {
+                    $col_name = $data[$i]->process;
+                    $row[] = self::select("$col_name as name",
+                                          'title',
+                                          'Authorization',
                                           'id',
                                           'created_at')
-                        ->where(function($query) use($id, $i){
-                                $query->orWhere('id',$id[$i]);
+                        ->where(function($query) use($data, $i){
+                                $query->orWhere('id',$data[$i]->id);
                         })
-                        ->where($process[$i],'!=', '---')
-                        ->where($process[$i],'!=', NULL)
+                        ->where($data[$i]->process,'!=', '---')
+                        ->where($data[$i]->process,'!=', NULL)
                         ->get();
                 }
             }
@@ -218,7 +205,8 @@ class Draft extends Model
 
     public static function GetRetrievedIndex() {
         $index = self::select('drafts.id',
-                              'title','name',
+                              'title',
+                              'name',
                               'retrieved_tasks.updated_at')
                         ->join('retrieved_tasks','drafts.id','=','retrieved_tasks.retrieved_task')
                         ->join('users','retrieved_tasks.retriever','=','users.id')
@@ -257,10 +245,11 @@ class Draft extends Model
     }
 
     public static function deleteTaskFile($id) {
+        //Draftテーブルのカラム「file」の数だけループ
         for($i=1;$i<5;$i++) {
             $file_num = 'file_'. $i;
-            $file[] = self::select("$file_num")
-                           ->where("$file_num",'!=', NULL)
+            $file[] = self::select($file_num)
+                           ->where($file_num,'!=', NULL)
                            ->where('id',$id)
                            ->get();
         }
@@ -275,6 +264,7 @@ class Draft extends Model
        
         if(!empty($index)) {
             for($i=0;$i<count($index);$i++) {
+                //Draftテーブルのカラム「file」の数だけループ
                 for($j=1;$j<5;$j++) {
                     $num = 'file_'.$j;
                     if($index[$i]->{$num} !== NULL) {
@@ -288,10 +278,11 @@ class Draft extends Model
     }
 
     public static function deleteTaskRef($id) {
+        //Draftテーブルのカラム「file」の数だけループ
         for($i=1;$i<5;$i++) {
             $file_num = 'ref_'. $i;
-            $file[] = self::select("$file_num")
-                           ->where("$file_num",'!=', NULL)
+            $file[] = self::select($file_num)
+                           ->where($file_num,'!=', NULL)
                            ->where('id',$id)
                            ->get();
         }
@@ -306,6 +297,7 @@ class Draft extends Model
        
         if(!empty($index)) {
             for($i=0;$i<count($index);$i++) {
+                //Draftテーブルのカラム「file」の数だけループ
                 for($j=1;$j<5;$j++) {
                     $num = 'ref_'.$j;
                     if($index[$i]->{$num} !== NULL) {

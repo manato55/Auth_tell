@@ -117,6 +117,7 @@
                                    </p>
                                    <p class="pointer">⬇</p>
                                    <p>関与者1：
+                                   <!-- ルートのプルダウンメニューにおいて、差戻者のプルダウンを「---」に変更できないよう$cntで制御 -->
                                    @php
                                      $cnt = 0;
                                    @endphp
@@ -139,7 +140,7 @@
                                         @endphp
                                           @foreach($data as $val)
                                               @if($val->name === $index->auth_1 && empty(old('auth_1')))
-                                                <option value="{{ $val->name }}" selected>{{$val->role}}&nbsp;{{ $val->name }}</option>
+                                                <option value="{{ $val->name }}" selected>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                               @else
                                                 <option value="{{ $val->name }}" @if(old('auth_1') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                               @endif
@@ -172,7 +173,7 @@
                                        @endphp
                                          @foreach($data as $val)
                                             @if($val->name === $index->auth_2 && empty(old('auth_2')))
-                                              <option value="{{ $val->name }}" selected>{{$val->role}}&nbsp;{{ $val->name }}</option>
+                                              <option value="{{ $val->name }}" selected>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                             @else
                                               <option value="{{ $val->name }}" @if(old('auth_2') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                             @endif
@@ -233,7 +234,7 @@
                                        @endphp
                                         @foreach($data as $val)
                                             @if($val->name === $index->auth_4 && empty(old('auth_4')))
-                                              <option value="{{ $val->name }}" selected>{{$val->role}}&nbsp;{{ $val->name }}</option>
+                                              <option value="{{ $val->name }}" selected>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                             @else
                                               <option value="{{ $val->name }}" @if(old('auth_4') === $val->name) selected  @endif>{{ $val->role }}&nbsp;{{ $val->name }}</option>
                                             @endif
@@ -279,7 +280,6 @@
 
                             <button class="btn submit" name="submit" value="submit_1">差戻者へ提出</button>
                             <button class="btn re_submit_btn submit" name="submit" value="submit_2">再提出</button>
-                            <!-- <a class="btn discard_btn bg-danger" href="/deleteTask/{{ $index->retrieved_task }}">破棄</a> -->
                             <a class="btn discard_btn margin_btn bg-danger" href="{{ route('deleteTask', ['id'=>$index->retrieved_task] ) }}">破棄</a>
                         </form>
                       </div>

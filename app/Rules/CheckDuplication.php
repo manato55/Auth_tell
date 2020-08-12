@@ -39,6 +39,7 @@ class CheckDuplication implements Rule
      */
     public function passes($attribute, $value)
     {
+        //Draftテーブルのカラム「auth」の数だけループ
         for($i=1;$i<6;$i++) {
             $auth = '_auth_'.$i;
             for($j=$i+1;$j<6;$j++) {

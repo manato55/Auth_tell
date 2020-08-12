@@ -9,4 +9,5 @@ Bootstrap 4
 PHP 7.3
 Laravel 5.5
 MySQL
-仮想環境構築：Docker/Laradock
+<h2>仮想環境構築</h2>
+Docker/Laradock
