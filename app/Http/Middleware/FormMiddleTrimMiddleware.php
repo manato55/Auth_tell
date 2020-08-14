@@ -17,9 +17,9 @@ class FormMiddleTrimMiddleware
     {
         $input = $request->all();
         
+        //文字列の間にある半角・全角スペースを削除
         $trimmed = []; 
-        foreach($input as $key => $val)
-        {
+        foreach($input as $key => $val) {
             $trimmed[$key] = preg_replace("/( |　)/", "", $val );
         }
  

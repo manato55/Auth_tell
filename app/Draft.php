@@ -31,13 +31,14 @@ class Draft extends Model
             'process'=>'auth_1'
         ]);
 
-        $path = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $draftData->id;
-        File::makeDirectory($path, 0777, true);
+        $com_path = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $draftData->id;
 
-        $filePath = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'file';
+        File::makeDirectory($com_path, 0777, true);
+
+        $filePath = $com_path .'/'. 'file';
         File::makeDirectory($filePath, 0777, true);
 
-        $refPath = storage_path() . '/app/public/files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'ref';
+        $refPath = $com_path .'/'. 'ref';
         File::makeDirectory($refPath, 0777, true);
       
         $filePath02 = 'files/' . Auth::User()->id .'/'. $draftData->id .'/'. 'file';
@@ -84,12 +85,12 @@ class Draft extends Model
                 if($data[$i]->process !== 'auth_0' && $data[$i]->process !== 'auth_6') {
                     $row[] = self::select('process',
                                           'drafts.id')
-                             ->where($data[$i]->process, Auth::User()->name)
-                             ->where('drafts.id',$data[$i]->id)
-                             ->get();
+                                    ->where($data[$i]->process, Auth::User()->name)
+                                    ->where('drafts.id',$data[$i]->id)
+                                    ->get();
                 }  
             }
-           
+            
             if(!empty($row)) {
                 foreach($row as $val) {
                     if( !$val->isEmpty() ) {
@@ -316,7 +317,6 @@ class Draft extends Model
                         ->where('title','LIKE', "%$title%")
                         ->get();
                         
-
         return $index;
     }
 
@@ -325,7 +325,6 @@ class Draft extends Model
                         ->where('users.team',Auth::User()->team)
                         ->where('title','LIKE', "%$title%")
                         ->get();
-                        
 
         return $index;
     }

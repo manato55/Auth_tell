@@ -43,37 +43,18 @@ class CheckDuplication implements Rule
         for($i=1;$i<6;$i++) {
             $auth = '_auth_'.$i;
             for($j=$i+1;$j<6;$j++) {
-                $subauth = '_auth_'.$j;
-                if($this->{$subauth} === '---' || $this->{$subauth} === null) {
-                    $this->{$subauth} = 'escape_duplication_1';
+                $subAuth = '_auth_'.$j;
+                if($this->{$auth} === '---' || $this->{$auth} === null) {
+                    $this->{$auth} = 'escape_duplication';
                 }
-                if($this->{$auth} === 'escape_duplication_1' || $this->{$auth} === null) {
-                    $this->{$auth} = 'escape_duplication_2';
-                }
-                if($this->{$subauth} === 'escape_duplication_2' || $this->{$subauth} === null) {
-                     $this->{$subauth} = 'escape_duplication_3';
-                }
-                if($this->{$auth} === $this->{$subauth}) {
-                    $result[] = false;
-                } else {
-                    $result[] = true;
-                }
+                if($this->{$auth} === $this->{$subAuth}) {
+                    return false;
+                } 
             }
-        }
-       
-        foreach($result as $val) {
-            if($val === false) {
-                $error_num[] = $val;
-            }
-        }
-       
-        if(empty($error_num)) {
-            $data = true;
-        } else {
-            $data = false;
         }
         
-        return $data;
+        return true;
+
     }
 
     /**

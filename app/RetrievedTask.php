@@ -76,7 +76,7 @@ class RetrievedTask extends Model
                     $num = 'ref_'.$i;
                     Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'ref' . '/' . $file->{$num});
                     $filename = $request->file('ref_'.$i)->getClientOriginalName();
-                    $path = $request->file('ref_'.$i)->storeAs('files'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
+                    $path = $request->file('ref_'.$i)->storeAs('files/'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }
@@ -116,7 +116,7 @@ class RetrievedTask extends Model
                     $num = 'ref_'.$i;
                     Storage::delete('public/files/' . Auth::User()->id . '/' . $id . '/' . 'ref' . '/' . $file->{$num});
                     $filename = $request->file('ref_'.$i)->getClientOriginalName();
-                    $path = $request->file('ref_'.$i)->storeAs('files'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
+                    $path = $request->file('ref_'.$i)->storeAs('files/'  . Auth::User()->id . '/' . $id . '/' . 'ref', $filename, 'public');
                     $file->{$num} = basename($path);
                     $file->save();
                 }

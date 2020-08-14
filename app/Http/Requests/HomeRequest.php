@@ -56,6 +56,7 @@ class HomeRequest extends FormRequest
             'file_2' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<5;$i++) {
@@ -72,6 +73,7 @@ class HomeRequest extends FormRequest
             'file_3' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<5;$i++) {
@@ -88,6 +90,7 @@ class HomeRequest extends FormRequest
             'file_4' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<4;$i++) {
@@ -102,6 +105,7 @@ class HomeRequest extends FormRequest
                 'file',
                 'image',
                 new CheckRefDuplication($this->ref_1, $this->ref_2, $this->ref_3, $this->ref_4,),
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=2;$i<5;$i++) {
@@ -115,6 +119,7 @@ class HomeRequest extends FormRequest
             'ref_2' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<5;$i++) {
@@ -131,6 +136,7 @@ class HomeRequest extends FormRequest
             'ref_3' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<5;$i++) {
@@ -147,6 +153,7 @@ class HomeRequest extends FormRequest
             'ref_4' => [
                 'file',
                 'image',
+                 //添付したファイル名が他の添付ファイル名と重複していないかチェック
                 function ($attribute, $value, $fail) use($request) {
                     $db_val = Draft::where('id',$request->id)->first();
                     for($i=1;$i<4;$i++) {

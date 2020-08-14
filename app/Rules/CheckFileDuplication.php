@@ -43,29 +43,14 @@ class CheckFileDuplication implements Rule
                 $subfile = '_file_'.$j;
                 if($this->{$file} !== NULL && $this->{$subfile} !== NULL ) {
                     if($this->{$file}->getClientOriginalName() === $this->{$subfile}->getClientOriginalName()) {
-                        $result[] = false;
-                    } else {
-                        $result[] = true;
-                    }
-                } else {
-                    $result[] = true;
-                }
+                        return false;
+                    } 
+                } 
             }
         }        
-       
-        foreach($result as $val) {
-            if($val === false) {
-                $error_num[] = $val;
-            }
-        }
-       
-        if(empty($error_num)) {
-            $data = true;
-        } else {
-            $data = false;
-        }
         
-        return $data;
+        return true;
+
     }
 
     /**

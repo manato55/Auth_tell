@@ -43,31 +43,15 @@ class CheckRefDuplication implements Rule
             for($j=$i+1;$j<5;$j++) {
                 $subref = '_ref_'.$j;
                 if($this->{$ref} !== NULL && $this->{$subref} !== NULL ) {
-                    
                     if($this->{$ref}->getClientOriginalName() === $this->{$subref}->getClientOriginalName()) {
-                        $result[] = false;
-                    } else {
-                        $result[] = true;
-                    }
-                } else {
-                    $result[] = true;
-                }
+                        return false;
+                    } 
+                } 
             }
         }        
        
-        foreach($result as $val) {
-            if($val === false) {
-                $error_num[] = $val;
-            }
-        }
-       
-        if(empty($error_num)) {
-            $data = true;
-        } else {
-            $data = false;
-        }
-        
-        return $data;
+        return true;
+
     }
 
     /**
